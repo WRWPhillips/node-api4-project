@@ -40,9 +40,32 @@ server.get('/api/users', (req, res) => {
       username: user.username
     });
   });
-  res.json(returnArrayTemp);
+  res.status(200).json(returnArrayTemp);
 });
 
+server.post('/api/register', (req, res) => {
+  const body = req.body;
+  console.log(body);
+  if(!body.username || !body.password) {
+    res.status(500).json({message: 'username and password required'});
+  } else {
+    users.push({
+      id: Date.now(),
+      username: body.username,
+      password: body.password
+    })
+    .then(user => {
+      res.status(201).json(user.username)
+    })
+    .catch((error) => {
+      res.status(500).json({message: 'registration failure'});
+    });
+  }
+});
+
+server.post('/api/login', (req, res) => {
+
+});
 
 module.exports = server;
 
