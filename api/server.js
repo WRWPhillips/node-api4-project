@@ -53,18 +53,29 @@ server.post('/api/register', (req, res) => {
       id: Date.now(),
       username: body.username,
       password: body.password
-    })
-    .then(user => {
-      res.status(201).json(user.username)
-    })
-    .catch((error) => {
-      res.status(500).json({message: 'registration failure'});
     });
+    res.status(201).json(body.username)
   }
 });
 
 server.post('/api/login', (req, res) => {
-
+  const body = req.body
+  console.log(body);
+  if(!body.username || !body.password) {
+    res.status(500).json({message: 'username and password required'});
+  } else {
+    const total = [];
+    users.forEach(n => {
+      console.log(Object.values(n));
+      total.push(Object.values(n));
+    });
+    const total2 = [].concat.apply([], total);
+    if(total2.includes(body.username) && total2.includes(body.password)) {
+      res.status(200).json({message: "welcome!"})
+    } else {
+      res.status(404).json({message: "user with those credentials not found"})
+    }
+  }
 });
 
 module.exports = server;
